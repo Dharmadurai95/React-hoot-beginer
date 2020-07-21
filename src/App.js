@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+
 import './App.css';
+import Todo from './component/todo';
+import Header from './component/Header';
+import Auth from './component/Auth';
+import AuthContext from './Auth-context';
+
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [page, setPage] = useState('auth');
+  const [authStatus,setAuthStatus] = useState(false)
+  const switchPage = pageName => {
+    setPage(pageName)
+  }
+const login = ()=> {
+  setAuthStatus(true)
 }
+  return (
+    <React.Fragment >
+      <AuthContext.Provider value = {{status:authStatus,login:login}}>
+        <div className='mainPage'>
+          <Header
+            onLoadTodos={switchPage.bind(this, 'todos')}
+            onLoadAuth={switchPage.bind(this, 'auth')} />
+          <hr></hr>
+          {page === 'auth' ? <Auth /> : <Todo />}
+        </div>
 
+      </AuthContext.Provider>
+
+    </React.Fragment>
+  )
+}
 export default App;
